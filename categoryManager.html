@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>category manage</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+<body>
+<h1>CATEGORY MANAGER</h1>
+<a href="createCategory.html"><button>Create New Category</button></a>
+<a href="index.html"><button>product list</button></a>
+<table id="container" border="1" style="width: 100% ;color: #51a60e">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>EDIT</th>
+        <th>DELETE</th>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+</table>
+<div id="page">
+</div>
+<script>
+    let url = "http://localhost:8080/api/category";
+    let page = 0;
+    $(document).ready(function () {
+        showCategory();
+    })
+    function showCategory() {
+        $.ajax({
+            url:url  ,
+            method:"GET",
+
+            success:function (data) {
+                let categorys = data.content;
+                let tbody = $("#tbody");
+                tbody.empty();
+
+                for (let i = 0; i < categorys.length; i++) {
+                    let cate = categorys[i];
+                    tbody.append(`
+                    <tr>
+                    <td>${cate.id}</td>
+                    <td>${cate.name}</td>
+
+                    <td><a href="editCate.html?id=${cate.id}"><button> edit</button></a></td>
+                    <td><a href="deleteCate.html?id=${cate.id}"><button> delete</button></a></td>
+                    </tr>
+                    `)
+                }
+                // let page= $("#page");
+                // page.empty();
+                // if (!data.first){
+                //     $("#page").append(`<button onclick="previousPage()">previous</button>`)
+                // }
+                // $("#page").append(`
+                // ${data.number +1} / ${data.totalPages}
+                // `)
+                // if (!data.last){
+                //     $("#page").append(`<button onclick="nextPage()"> next</button>`)
+                // }
+                error:function f() {
+                    alert('error')
+                }
+
+            }
+        })
+    }
+    function previousPage() {
+        page--;
+        showCategory()
+    }
+    function nextPage() {
+        page++;
+        showCategory()
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demooooo Ajax</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+</head>
+<body>
+<h1 style="color: #e2ac36 ; text-align: center">PRODUCT MANAGE</h1>
+<a href="create.html"> <button>create Product</button> </a>
+<a href="categoryManager.html"><button>Category Manager</button></a>
+
+<table id="container" border="1" style="width: 100% ;color: #e2ac36">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>PRICE</th>
+        <th>DESCRIPTION</th>
+        <th>IMANUFATURER</th>
+        <th>CATEGORY</th>
+        <th>EDIT</th>
+        <th>DELETE</th>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+</table>
+<div id="page">
+
+</div>
+
+
+<script>
+    let url = "http://localhost:8080//api/products?page=";
+    let page = 0;
+    $(document).ready(function () {
+        getProduct();
+    })
+    function getProduct() {
+        $.ajax({
+            url:url + page ,
+            method:"GET",
+
+            success:function (data) {
+
+                let products = data.content;
+                let tbody = $("#tbody")
+                tbody.empty();
+
+                for (let i = 0; i < products.length; i++) {
+                    let pro = products[i];
+                    tbody.append(
+                        `
+                    <tr>
+                    <td>${pro.id}</td>
+                    <td>${pro.name}</td>
+                    <td>${pro.price}</td>
+                    <td>${pro.description}</td>
+                    <td>${pro.manufacturer}</td>
+                    <td>${pro.category.name}</td>
+                    <td><a href="edit.html?id=${pro.id}"><button> edit</button></a></td>
+                    <td><a href="delete.html?id=${pro.id}"><button> delete</button></a></td>
+                    </tr>
+                    `)
+                }
+                let page= $("#page");
+                page.empty();
+
+                if (!data.first){
+                    $("#page").append(`<button onclick="previousPage()">previous</button>`)
+                }
+
+                $("#page").append(`
+                ${data.number +1} / ${data.totalPages}
+                `)
+
+                if (!data.last){
+                    $("#page").append(`<button onclick="nextPage()"> next</button>`)
+                }
+            },
+            error:function () {
+                alert('error')
+            }
+        })
+
+    }
+    function previousPage() {
+        page --;
+        getProduct()
+    }
+    function nextPage() {
+        page ++;
+        getProduct()
+    }
+
+
+
+</script>
+</body>
+</html>

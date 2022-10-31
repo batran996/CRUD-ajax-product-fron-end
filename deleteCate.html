@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>delete</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+<body>
+<h1>Delete Category</h1>
+<a href="categoryManager.html"><button> List category </button></a>
+
+<table border="1">
+    <tr>
+        <td>name</td>
+        <td><input id="name" type="text"></td>
+    </tr>
+    <tr>
+        <td>
+            <a href="categoryManager.html"><button style="width: 100% ;color: #c308e2">back</button></a>
+        </td>
+        <td>
+            <button style="width: 100% ; color: #030000" onclick="deleteCate()">delete</button>
+        </td>
+    </tr>
+</table>
+
+
+<script>
+    let query = window.location.search;
+    let id = new URLSearchParams(query).get("id");
+    console.log(id);
+    $(document).ready(function () {
+
+        getCateById();
+    })
+
+    function getCateById() {
+        $.ajax({
+            url: "http://localhost:8080/api/category/" + id,
+            method: "GET",
+            success: function (data) {
+                alert("start delete")
+                $("#name").val(data.name);
+                return;
+            },
+            error: function () {
+                alert("category not found")
+            }
+        })
+
+    }
+    function deleteCate() {
+        let cateDelete = {
+
+            name: $("#name").val(),
+        }
+        $.ajax({
+            url: "http://localhost:8080/api/category/" + id,
+            method: "DELETE",
+            data: JSON.stringify(cateDelete),
+            contentType: "application/json; charset=utf-8",
+            success: function f() {
+                alert("delete success")
+                return;
+            },
+            error: function () {
+                alert(" delete failer")
+            }
+        })
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+            integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<h1>create category</h1>
+<a href="categoryManager.html">
+    <button>back</button>
+</a>
+<table border="1">
+    <tr>
+        <td>name categoory</td>
+        <td><input id="name" type="text"></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <button style="width: 100%" onclick="senNewCate()">create</button>
+        </td>
+    </tr>
+</table>
+<script>
+    function senNewCate() {
+        let newCategory = {
+            name: $("#name").val(),
+        }
+        $.ajax({
+            url: "http://localhost:8080/api/category",
+            method: "POST",
+            data: JSON.stringify(newCategory),
+            contentType: "application/json; charset=utf-8",
+            success: function f() {
+                alert("create success")
+                return
+            },
+            error: function () {
+                alert(" create failer")
+            }
+
+        })
+
+    }
+</script>
+</body>
+</html>

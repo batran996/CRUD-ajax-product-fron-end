@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+            integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<h1>Edit Category</h1>
+<a href="categoryManager.html"><button> List Category </button></a>
+
+<table border="1">
+    <tr>
+        <td>name</td>
+        <td><input id="name" type="text"></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <button style="width: 100%" onclick="editCate()">edit</button>
+        </td>
+    </tr>
+</table>
+<script>
+    let query = window.location.search;
+    let id = new URLSearchParams(query).get("id");
+
+    $(document).ready(function () {
+        getCate()
+    })
+    function getCate() {
+        $.ajax({
+            url:"http://localhost:8080/api/category/" + id,
+            method: "GET",
+
+            success: function (data) {
+                alert("start edit")
+
+                $("#name").val(data.name);
+            },
+            error: function () {
+                alert('error')
+            }
+
+        })
+    }
+    function editCate() {
+            let cateEdit = {
+
+                name: $("#name").val(),
+            }
+        $.ajax({
+            url: "http://localhost:8080/api/category/" + id,
+            method: "PUT",
+            data: JSON.stringify(cateEdit),
+            contentType: "application/json; charset=utf-8",
+            success: function f() {
+                alert("edit success")
+                return;
+            },
+            error: function () {
+                alert(" edit failer")
+            }
+        })
+
+    }
+
+</script>
+
+</body>
+</html>

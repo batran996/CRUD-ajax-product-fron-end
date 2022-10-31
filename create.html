@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+            integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+<body>
+<a href="index.html">
+    <button>back</button>
+</a>
+<table border="1">
+    <tr>
+        <td>name</td>
+        <td><input id="name" type="text"></td>
+    </tr>
+    <tr>
+        <td>Price</td>
+        <td><input id="price" type="number"></td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td><input id="description" type="text"></td>
+    </tr>
+    <tr>
+        <td>Manufacturer</td>
+        <td><input id="manufacturer" type="text"></td>
+    </tr>
+    <tr>
+        <td>Category</td>
+        <td><select id="category">
+
+        </select></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <button style="width: 100%" onclick="senData()">create</button>
+        </td>
+    </tr>
+</table>
+<script>
+    $(document).ready(function () {
+        getCategory();
+    })
+
+    function getCategory() {
+        $.ajax({
+            url: "http://localhost:8080//api/category",
+            method: "GET",
+
+            success: function (data) {
+                console.log(data.content)
+                let categorys = data.content;
+                let select = $("#category");
+
+                for (let i = 0; i < categorys.length; i++) {
+                    let cate = categorys[i];
+                    select.append(
+                        `
+                    <option value="${cate.id}">
+                    ${cate.name}
+                    </option>
+                    `)
+
+                }
+            },
+            error: function () {
+                alert('error')
+            }
+
+        })
+
+    }
+
+    function senData() {
+        let productCreate = {
+            name: $("#name").val(),
+            price: $("#price").val(),
+            manufacturer: $("#manufacturer").val(),
+            description: $("#description").val(),
+            idCategory: $("#category").val(),
+        }
+        $.ajax({
+            url: "http://localhost:8080//api/products",
+            method: "POST",
+            data: JSON.stringify(productCreate),
+            contentType: "application/json; charset=utf-8",
+            success: function f() {
+                alert("create success")
+                return
+            },
+            error: function () {
+                alert(" create failer")
+            }
+
+        })
+
+    }
+
+
+</script>
+</body>
+</html>
